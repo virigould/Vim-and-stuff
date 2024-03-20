@@ -35,7 +35,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'crusoexia/vim-monokai'
 Plug 'jiangmiao/auto-pairs'
-Plug 'ervandew/supertab'
+"Plug 'ervandew/supertab'
 Plug 'tpope/vim-eunuch'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-endwise'
@@ -43,10 +43,36 @@ Plug 'sheerun/vim-polyglot'
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'yggdroot/indentline'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 "Plug 'Valloric/YouCompleteMe'
 "Plug 'nathanaelkane/vim-indent-guides'
 
 call plug#end()
+
+
+
+" ## config for lsp servers
+
+" copied (almost) directly from the vim-lsp docs:
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+
+    let g:lsp_format_sync_timeout = 1000
+    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled (set the lsp shortcuts) when an lsp server
+    " is registered for a buffer.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
 
 if !has('gui_running')
     set t_Co=256
@@ -91,3 +117,6 @@ au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 let g:indentLine_char = '|'
 let g:indentLine_color_term = 239
+
+
+
